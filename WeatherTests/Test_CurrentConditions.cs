@@ -21,9 +21,11 @@ namespace WeatherTests
         }
 
         [TestMethod]
-        public void TestMethod1()
+        public void ParseNormalCurrentConditions()
         {
             var cc = new CurrentConditions(new Mock_CurrentConditionsProvider1());
+
+            Assert.IsNull(cc.Error);
 
             Assert.AreEqual("Hugo", cc.City);
             Assert.AreEqual("MN", cc.State);
@@ -36,6 +38,23 @@ namespace WeatherTests
             Assert.AreEqual(14.5, cc.WindSpeed);
             Assert.AreEqual(20.9, cc.WindGustSpeed);
             Assert.AreEqual(16.1, cc.Visibility);
+        }
+
+        class Mock_CurrentConditionsProvider2 : ICurrentConditionsProvider
+        {
+            string ICurrentConditionsProvider.QueryCurrentConditions()
+            {
+                return Properties.Resources.CurrentConditions_10000;
+            }
+        }
+
+        [TestMethod]
+        public void ParseUnknownZipCodeCurrentConditions()
+        {
+            var cc = new CurrentConditions(new Mock_CurrentConditionsProvider2());
+
+            Assert.IsNotNull(cc.Error);
+            Assert.AreEqual("No cities match your search query", cc.Error);
         }
     }
 }

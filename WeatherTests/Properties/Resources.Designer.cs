@@ -68,6 +68,27 @@ namespace WeatherTests.Properties {
         ///	&lt;features&gt;
         ///		&lt;feature&gt;conditions&lt;/feature&gt;
         ///	&lt;/features&gt;
+        ///		&lt;error&gt;
+        ///		&lt;type&gt;querynotfound&lt;/type&gt;
+        ///		&lt;description&gt;No cities match your search query&lt;/description&gt;
+        ///	&lt;/error&gt;
+        ///&lt;/response&gt;
+        ///.
+        /// </summary>
+        internal static string CurrentConditions_10000 {
+            get {
+                return ResourceManager.GetString("CurrentConditions_10000", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///&lt;response&gt;
+        ///	&lt;version&gt;0.1&lt;/version&gt;
+        ///	&lt;termsofService&gt;http://www.wunderground.com/weather/api/d/terms.html&lt;/termsofService&gt;
+        ///	&lt;features&gt;
+        ///		&lt;feature&gt;conditions&lt;/feature&gt;
+        ///	&lt;/features&gt;
         ///  &lt;current_observation&gt;
         ///		&lt;image&gt;
         ///		&lt;url&gt;http://icons.wxug.com/graphics/wu2/logo_130x80.png&lt;/url&gt;

@@ -75,6 +75,9 @@
   <ItemGroup>
     <None Include="Resources\CurrentConditions_55038.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CurrentConditions_10000.xml" />
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

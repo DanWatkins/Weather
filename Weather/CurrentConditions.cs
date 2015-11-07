@@ -64,6 +64,11 @@ namespace Weather
          */
         public double Visibility { get; set; }
 
+        /**
+         * Error string describing a problem. Null if no error occured.
+         */
+         public string Error { get; set; }
+
         public CurrentConditions(ICurrentConditionsProvider currentConditionsProvider)
         {
             ParseInputXml(currentConditionsProvider.QueryCurrentConditions());
@@ -74,6 +79,15 @@ namespace Weather
             var xmlDocument = new XmlDocument();
             xmlDocument.LoadXml(inputXml);
             var node_response = xmlDocument.FirstChild;
+
+            var node_error = node_response["error"];
+
+            if (node_error != null)
+            {
+                Error = node_error["description"].InnerText;
+                return;
+            }
+
             var node_currentObservation = node_response["current_observation"];
             {
                 var node_displayLocation = node_currentObservation["display_location"];
