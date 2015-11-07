@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Mock_CurrentConditions.cs" />
     <Compile Include="Mock_CurrentConditionsProvider.cs" />
+    <Compile Include="Test_APIKey.cs" />
     <Compile Include="Test_CurrentConditions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

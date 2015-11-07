@@ -1,8 +1,13 @@
-﻿using System;
+﻿//=============================================================================|
+// Copyright (C) 2015 Dan Watkins
+// This file is licensed under the MIT License.
+//=============================================================================|
+
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Weather;
 
-namespace CurrentConditionsTests
+namespace WeatherTests
 {
     [TestClass]
     public class Test_CurrentConditions

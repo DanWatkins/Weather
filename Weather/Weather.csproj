@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="APIKey.cs" />
     <Compile Include="CurrentConditions.cs" />
     <Compile Include="CurrentConditionsProvider.cs" />
     <Compile Include="Program.cs" />
