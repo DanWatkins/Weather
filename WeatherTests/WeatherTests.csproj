@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F7ECAF30-6654-451E-937B-C820C49B576D}</ProjectGuid>
+    <ProjectGuid>{EC608B2D-FE1F-4862-BA55-EDD8B382EF33}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CurrentConditionsTests</RootNamespace>
-    <AssemblyName>CurrentConditionsTests</AssemblyName>
+    <RootNamespace>WeatherTests</RootNamespace>
+    <AssemblyName>WeatherTests</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -51,16 +51,29 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Mock_CurrentConditions.cs" />
-    <Compile Include="Mock_CurrentConditionsProvider.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Test_APIKey.cs" />
     <Compile Include="Test_CurrentConditions.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Weather\Weather.csproj">
-      <Project>{2fd5a9d3-7af3-439c-a915-b1d6da78137d}</Project>
+      <Project>{6791dcaa-fa26-402d-8cfe-925758beae20}</Project>
       <Name>Weather</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CurrentConditions_55038.xml" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

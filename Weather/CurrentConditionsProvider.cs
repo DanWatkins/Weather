@@ -7,11 +7,15 @@ namespace Weather
 {
     public interface ICurrentConditionsProvider
     {
-
+        string QueryCurrentConditions();
     }
 
 
     public class CurrentConditionsProvider : ICurrentConditionsProvider
     {
+        string ICurrentConditionsProvider.QueryCurrentConditions()
+        {
+            return "";
+        }
     }
 }

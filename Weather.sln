@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Weather", "Weather\Weather.csproj", "{2FD5A9D3-7AF3-439C-A915-B1D6DA78137D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Weather", "Weather\Weather.csproj", "{6791DCAA-FA26-402D-8CFE-925758BEAE20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherTests", "WeatherTests\WeatherTests.csproj", "{F7ECAF30-6654-451E-937B-C820C49B576D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherTests", "WeatherTests\WeatherTests.csproj", "{EC608B2D-FE1F-4862-BA55-EDD8B382EF33}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2FD5A9D3-7AF3-439C-A915-B1D6DA78137D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2FD5A9D3-7AF3-439C-A915-B1D6DA78137D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2FD5A9D3-7AF3-439C-A915-B1D6DA78137D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2FD5A9D3-7AF3-439C-A915-B1D6DA78137D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F7ECAF30-6654-451E-937B-C820C49B576D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F7ECAF30-6654-451E-937B-C820C49B576D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F7ECAF30-6654-451E-937B-C820C49B576D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F7ECAF30-6654-451E-937B-C820C49B576D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6791DCAA-FA26-402D-8CFE-925758BEAE20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6791DCAA-FA26-402D-8CFE-925758BEAE20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6791DCAA-FA26-402D-8CFE-925758BEAE20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6791DCAA-FA26-402D-8CFE-925758BEAE20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC608B2D-FE1F-4862-BA55-EDD8B382EF33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC608B2D-FE1F-4862-BA55-EDD8B382EF33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC608B2D-FE1F-4862-BA55-EDD8B382EF33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC608B2D-FE1F-4862-BA55-EDD8B382EF33}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

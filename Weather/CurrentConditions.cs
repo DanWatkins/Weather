@@ -8,18 +8,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Weather
 {
     public class CurrentConditions
     {
         /**
-         * City where the conditions were observed.
+         * City where the conditions represent.
          */
         public string City { get; set; } = "";
 
         /**
-         * State where the conditions were observed.
+         * State where the conditions represent.
          */
         public string State { get; set; } = "";
 
@@ -36,7 +37,7 @@ namespace Weather
         /**
          * A brief description for the type of weather.
          */
-        public double Brief { get; set; }
+        public String Brief { get; set; }
 
         /**
          * Measured in degrees celsius.
@@ -63,13 +64,33 @@ namespace Weather
          */
         public double Visibility { get; set; }
 
-        private ICurrentConditionsProvider _currentConditionsProvider;
-
-        private CurrentConditions() { }
-
         public CurrentConditions(ICurrentConditionsProvider currentConditionsProvider)
         {
-            
+            ParseInputXml(currentConditionsProvider.QueryCurrentConditions());
+        }
+
+        private void ParseInputXml(string inputXml)
+        {
+            var xmlDocument = new XmlDocument();
+            xmlDocument.LoadXml(inputXml);
+            var node_response = xmlDocument.FirstChild;
+            var node_currentObservation = node_response["current_observation"];
+            {
+                var node_displayLocation = node_currentObservation["display_location"];
+                {
+                    City = node_displayLocation["city"].InnerText;
+                    State = node_displayLocation["state"].InnerText;
+                    Elevation = (int)double.Parse(node_displayLocation["elevation"].InnerText);
+                }
+
+                ObservationTime = node_currentObservation["observation_time_rfc822"].InnerText;
+                Brief = node_currentObservation["weather"].InnerText;
+                Temperature = double.Parse(node_currentObservation["temp_c"].InnerText);
+                RelativeHumidity = double.Parse(node_currentObservation["relative_humidity"].InnerText.Replace("%", "")) / 100.0;
+                WindSpeed = double.Parse(node_currentObservation["wind_kph"].InnerText);
+                WindGustSpeed = double.Parse(node_currentObservation["wind_gust_kph"].InnerText);
+                Visibility = double.Parse(node_currentObservation["visibility_km"].InnerText);
+            }
         }
     }
 }
