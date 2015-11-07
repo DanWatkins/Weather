@@ -6,6 +6,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Weather;
 using System.IO;
+using System;
 
 namespace WeatherTests
 {
@@ -39,6 +40,47 @@ namespace WeatherTests
             var apiKey2 = new APIKey();
             Assert.IsTrue(apiKey2.LinkCacheFile(tempFile));
             Assert.AreEqual(someApiKeyString, apiKey2.Value);
+        }
+
+
+        [TestMethod]
+        public void FileDoesNotExistDuringLinkCachFile()
+        {
+            var apiKey = new APIKey();
+
+            try
+            {
+                apiKey.LinkCacheFile("");
+            }
+            catch (ArgumentException)
+            {
+                return;
+            }
+
+            Assert.Fail("ArgumentException was not thrown when linking to a non-existent file.");
+        }
+
+        [TestMethod]
+        public void FileDoesNotExistDuringValueAssignment()
+        {
+            const string someApiKeyString = "b13a56ac651acb6d550";
+            string tempFile = Path.GetTempFileName();
+
+            var apiKey = new APIKey();
+            apiKey.LinkCacheFile(tempFile);
+
+            File.Delete(tempFile);
+
+            try
+            {
+                apiKey.Value = someApiKeyString;
+            }
+            catch (ArgumentException)
+            {
+                return;
+            }
+
+            Assert.Fail("ArgumentException was not thrown when attempting to cache the value to a non-existent file.");
         }
     }
 }

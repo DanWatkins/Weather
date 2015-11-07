@@ -3,13 +3,16 @@
 // This file is licensed under the MIT License.
 //=============================================================================|
 
+using System;
 using System.IO;
 using System.Linq;
 
 namespace Weather
 {
     /**
-     * Manages the caching of a single API key. 
+     * Manages the caching of a single API key. The main objective is to allow
+     * users to avoid committing a key to source control and allowing users to
+     * drop in their own.
      */
     public class APIKey
     {
@@ -28,8 +31,14 @@ namespace Weather
                 _value = value;
 
                 //dump value to cache file
-                //if an IO exception occurs, that is the fault of the callee
-                File.WriteAllText(_cacheFilePath, _value);
+                if (File.Exists(_cacheFilePath))
+                {
+                    File.WriteAllText(_cacheFilePath, _value);
+                }
+                else
+                {
+                    throw new ArgumentException("The cache filepath " + _cacheFilePath + " does not exist.");
+                }
             }
         }
 
