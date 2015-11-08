@@ -12,16 +12,19 @@ namespace WeatherTests
     [TestClass]
     public class Test_CurrentConditions
     {
-        class Mock_CurrentConditionsProvider1 : ICurrentConditionsProvider
+        class Mock_CurrentConditionsProvider1 : CurrentConditionsProviderBase
         {
-            string ICurrentConditionsProvider.QueryCurrentConditions()
+            public override QueryResult QueryCurrentConditions()
             {
-                return Properties.Resources.CurrentConditions_55038;
+                var queryResult = new QueryResult();
+                queryResult.XmlData = Properties.Resources.CurrentConditions_55038;
+
+                return queryResult;
             }
         }
 
         [TestMethod]
-        public void ParseNormalCurrentConditions()
+        public void ParseNormalCurrentConditionsData()
         {
             var cc = new CurrentConditions(new Mock_CurrentConditionsProvider1());
 
@@ -40,21 +43,64 @@ namespace WeatherTests
             Assert.AreEqual(16.1, cc.Visibility);
         }
 
-        class Mock_CurrentConditionsProvider2 : ICurrentConditionsProvider
+        class Mock_CurrentConditionsProvider2 : CurrentConditionsProviderBase
         {
-            string ICurrentConditionsProvider.QueryCurrentConditions()
+            public override QueryResult QueryCurrentConditions()
             {
-                return Properties.Resources.CurrentConditions_10000;
+                var queryResult = new QueryResult();
+                queryResult.XmlData = Properties.Resources.CurrentConditions_10000;
+
+                return queryResult;
             }
         }
 
         [TestMethod]
-        public void ParseUnknownZipCodeCurrentConditions()
+        public void ParseUnknownZipCodeCurrentConditionsData()
         {
             var cc = new CurrentConditions(new Mock_CurrentConditionsProvider2());
 
             Assert.IsNotNull(cc.Error);
             Assert.AreEqual("No cities match your search query", cc.Error);
+        }
+
+        class Mock_CurrentConditionsProvider3 : CurrentConditionsProviderBase
+        {
+            public override QueryResult QueryCurrentConditions()
+            {
+                var queryResult = new QueryResult();
+                queryResult.Error = "Network Error";
+
+                return queryResult;
+            }
+        }
+
+        [TestMethod]
+        public void ParseFailedCurrentConditionsData()
+        {
+            var cc = new CurrentConditions(new Mock_CurrentConditionsProvider3());
+
+            Assert.IsNotNull(cc.Error);
+            Assert.AreEqual("Network Error", cc.Error);
+        }
+
+        class Mock_CurrentConditionsProvider4 : CurrentConditionsProviderBase
+        {
+            public override QueryResult QueryCurrentConditions()
+            {
+                var queryResult = new QueryResult();
+                queryResult.XmlData = "<response>\n<vers";
+
+                return queryResult;
+            }
+        }
+
+        [TestMethod]
+        public void ParseCorruptCurrentConditionsData()
+        {
+            var cc = new CurrentConditions(new Mock_CurrentConditionsProvider4());
+
+            Assert.IsNotNull(cc.Error);
+            Assert.AreEqual("Invalid XML", cc.Error);
         }
     }
 }

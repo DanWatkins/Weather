@@ -5,17 +5,31 @@
 
 namespace Weather
 {
-    public interface ICurrentConditionsProvider
+    //I'm sorry for using an abstract class like an interface. C# is apparently
+    //against me declaring a nested class inside of an interface. Not sure why
+    //that wouldn't work (trying to think of edge cases...)
+
+    public abstract class CurrentConditionsProviderBase
     {
-        string QueryCurrentConditions();
+        public class QueryResult
+        {
+            public string Error { get; set; }
+
+            public string XmlData { get; set; }
+        }
+
+        public abstract QueryResult QueryCurrentConditions();
     }
 
 
-    public class CurrentConditionsProvider : ICurrentConditionsProvider
+    public class CurrentConditionsProvider : CurrentConditionsProviderBase
     {
-        string ICurrentConditionsProvider.QueryCurrentConditions()
+        public override QueryResult QueryCurrentConditions()
         {
-            return "";
+            var queryResult = new QueryResult();
+            queryResult.XmlData = "";
+
+            return queryResult;
         }
     }
 }

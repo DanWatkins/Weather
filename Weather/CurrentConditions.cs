@@ -4,10 +4,6 @@
 //=============================================================================|
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 
 namespace Weather
@@ -69,17 +65,41 @@ namespace Weather
          */
          public string Error { get; set; }
 
-        public CurrentConditions(ICurrentConditionsProvider currentConditionsProvider)
+        public CurrentConditions(CurrentConditionsProviderBase currentConditionsProvider)
         {
-            ParseInputXml(currentConditionsProvider.QueryCurrentConditions());
+            var queryResult = currentConditionsProvider.QueryCurrentConditions();
+
+            if (queryResult.Error != null)
+            {
+                Error = queryResult.Error;
+
+                return;
+            }
+
+            ParseInputXml(queryResult.XmlData);
         }
 
         private void ParseInputXml(string inputXml)
         {
             var xmlDocument = new XmlDocument();
-            xmlDocument.LoadXml(inputXml);
-            var node_response = xmlDocument.FirstChild;
 
+            try
+            {
+                xmlDocument.LoadXml(inputXml);
+            }
+            catch (XmlException)
+            {
+                Error = "Invalid XML";
+
+                return;
+            }
+
+            ParseXmlDocument(xmlDocument);
+        }
+
+        private void ParseXmlDocument(XmlDocument xmlDocument)
+        {
+            var node_response = xmlDocument.FirstChild;
             var node_error = node_response["error"];
 
             if (node_error != null)
