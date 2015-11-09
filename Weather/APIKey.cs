@@ -30,6 +30,9 @@ namespace Weather
             {
                 _value = value;
 
+                //TODO add test for when LinkCacheFile was not called, but an assignment is being made here
+                //TODO maybe we should just have LinkCacheFile be done in the constructor?
+
                 //dump value to cache file
                 if (File.Exists(_cacheFilePath))
                 {

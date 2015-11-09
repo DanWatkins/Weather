@@ -6,12 +6,36 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Weather;
+using System.IO;
+using System.Net;
 
 namespace WeatherTests
 {
     [TestClass]
     public class Test_CurrentConditions
     {
+        private static string _apiKey = "";
+
+        [ClassInitialize]
+        static public void ClassInitialize(TestContext testContext)
+        {
+            var currentConditionsProvider = new CurrentConditionsProvider();
+
+            var apiKeyForm = new APIKeyForm();
+            apiKeyForm.APIKey = new APIKey();
+
+            string tempFile = Path.GetTempFileName();
+            apiKeyForm.APIKey.LinkCacheFile(tempFile);
+
+            if (apiKeyForm.APIKey.Value == null)
+            {
+                apiKeyForm.ShowDialog();
+            }
+
+            _apiKey = apiKeyForm.APIKey.Value;
+            Assert.IsNotNull(_apiKey);
+        }
+
         class Mock_CurrentConditionsProvider1 : CurrentConditionsProviderBase
         {
             public override QueryResult QueryCurrentConditions()
@@ -68,7 +92,7 @@ namespace WeatherTests
             public override QueryResult QueryCurrentConditions()
             {
                 var queryResult = new QueryResult();
-                queryResult.Error = "Network Error";
+                queryResult.Error = "Network error";
 
                 return queryResult;
             }
@@ -80,7 +104,7 @@ namespace WeatherTests
             var cc = new CurrentConditions(new Mock_CurrentConditionsProvider3());
 
             Assert.IsNotNull(cc.Error);
-            Assert.AreEqual("Network Error", cc.Error);
+            Assert.AreEqual("Network error", cc.Error);
         }
 
         class Mock_CurrentConditionsProvider4 : CurrentConditionsProviderBase
@@ -101,6 +125,23 @@ namespace WeatherTests
 
             Assert.IsNotNull(cc.Error);
             Assert.AreEqual("Invalid XML", cc.Error);
+        }
+
+        class Mock_CurrentConditionsProvider5 : CurrentConditionsProviderBase
+        {
+            public override QueryResult QueryCurrentConditions()
+            {
+                throw new WebException();
+            }
+        }
+
+        [TestMethod]
+        public void HandleNetworkException()
+        {
+            var cc = new CurrentConditions(new Mock_CurrentConditionsProvider5());
+
+            Assert.IsNotNull(cc.Error);
+            Assert.AreEqual("Network error", cc.Error);
         }
     }
 }

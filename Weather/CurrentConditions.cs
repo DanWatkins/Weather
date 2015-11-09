@@ -4,6 +4,7 @@
 //=============================================================================|
 
 using System;
+using System.Net;
 using System.Xml;
 
 namespace Weather
@@ -67,16 +68,19 @@ namespace Weather
 
         public CurrentConditions(CurrentConditionsProviderBase currentConditionsProvider)
         {
-            var queryResult = currentConditionsProvider.QueryCurrentConditions();
-
-            if (queryResult.Error != null)
+            try
             {
-                Error = queryResult.Error;
+                var queryResult = currentConditionsProvider.QueryCurrentConditions();
 
-                return;
+                if (queryResult.Error != null)
+                    Error = queryResult.Error;
+                else
+                    ParseInputXml(queryResult.XmlData);
             }
-
-            ParseInputXml(queryResult.XmlData);
+            catch (WebException)
+            {
+                Error = "Network error";
+            }
         }
 
         private void ParseInputXml(string inputXml)
