@@ -1,7 +1,17 @@
-﻿using System.Xml;
+﻿using System;
+using System.Net;
+using System.Xml;
 
 namespace Weather
 {
+    public class WeatherException : Exception
+    {
+        public WeatherException(string message, Exception innerException) :
+            base(message, innerException)
+        {
+        }
+    }
+
     public class WeatherInfo
     {
         public double Temperature { get; set; }
@@ -10,12 +20,31 @@ namespace Weather
 
         readonly IWeatherService _weatherService;
 
-        public WeatherInfo(IWeatherService weatherService)
+        private WeatherInfo(IWeatherService weatherService)
         {
             _weatherService = weatherService;
         }
 
-        public void UpdateForZipCode(string zipCode)
+        public static WeatherInfo ForZipCode(IWeatherService weatherService, string zipCode)
+        {
+            try
+            {
+                var weatherInfo = new WeatherInfo(weatherService);
+                weatherInfo.UpdateForZipCode(zipCode);
+
+                return weatherInfo;
+            }
+            catch (WebException webException)
+            {
+                throw new WeatherException("There was a network error while connecting to the weather service.", webException);
+            }
+            catch (XmlException xmlException)
+            {
+                throw new WeatherException("There was an xml error while parsing weather data fromt he weather service.", xmlException);
+            }
+        }
+
+        private void UpdateForZipCode(string zipCode)
         {
             string xmlBuffer = _weatherService.GetWeatherForZipCode(zipCode);
 
