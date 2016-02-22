@@ -20,19 +20,16 @@ namespace Weather
 
         public WeatherLocation Location { get; set; }
 
-        readonly IWeatherService _weatherService;
-
-        private WeatherInfo(IWeatherService weatherService)
+        public WeatherInfo()
         {
-            _weatherService = weatherService;
         }
 
         public static WeatherInfo ForZipCode(IWeatherService weatherService, string zipCode)
         {
             try
             {
-                var weatherInfo = new WeatherInfo(weatherService);
-                weatherInfo.UpdateForZipCode(zipCode);
+                var weatherInfo = new WeatherInfo();
+                weatherInfo.UpdateForZipCode(weatherService, zipCode);
 
                 return weatherInfo;
             }
@@ -46,9 +43,9 @@ namespace Weather
             }
         }
 
-        private void UpdateForZipCode(string zipCode)
+        private void UpdateForZipCode(IWeatherService weatherService, string zipCode)
         {
-            string xmlBuffer = _weatherService.GetWeatherForZipCode(zipCode);
+            string xmlBuffer = weatherService.GetConditionsForZipCode(zipCode);
 
             var xmlDocument = new XmlDocument();
             xmlDocument.LoadXml(xmlBuffer);
