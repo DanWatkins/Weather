@@ -62,11 +62,20 @@ namespace Weather.Tests
         }
 
         [Test]
+        public void GetWeatherForZipCode_ErrorNocities()
+        {
+            var weatherService = new Mock<IWeatherService>();
+            weatherService.Setup(f => f.GetConditionsForZipCode("00000"))
+                .Returns(Properties.Resources.CurrentConditions_ErrorNoCities);
+
+            TestGetWeatherForZipCodeErrorNoCities(weatherService.Object);
+        }
+
+        [Test]
         [Category(TestCategory.Integration)]
         public void GetLiveWeatherForZipCode_58102()
         {
-            string apiKey = Weather.Properties.Resources.WeatherUndergroundAPIKey.Trim();
-            var weatherInfo = WeatherInfo.ForZipCode(new WeatherService(apiKey), "58102");
+            var weatherInfo = WeatherInfo.ForZipCode(CreateLiveWeatherService(), "58102");
 
             Assert.AreEqual("Fargo", weatherInfo.Location.City);
             Assert.AreEqual("ND", weatherInfo.Location.State);
@@ -74,6 +83,13 @@ namespace Weather.Tests
             Assert.AreEqual(271, weatherInfo.Location.Elevation);
 
             Assert.IsTrue(-200 <= weatherInfo.Temperature && weatherInfo.Temperature <= 200);
+        }
+
+        [Test]
+        [Category(TestCategory.Integration)]
+        public void GetLiveWeatherForZipCode_ErrorNoCities()
+        {
+            TestGetWeatherForZipCodeErrorNoCities(CreateLiveWeatherService());
         }
 
         #endregion
@@ -113,6 +129,22 @@ namespace Weather.Tests
             Assert.AreEqual(message, weatherException.Message);
             Assert.IsNotNull(weatherException.InnerException);
             Assert.IsTrue(weatherException.InnerException is TException);
+        }
+
+        private void TestGetWeatherForZipCodeErrorNoCities(IWeatherService weatherService)
+        {
+            var weatherException = Assert.Throws<WeatherException>(delegate
+            {
+                WeatherInfo.ForZipCode(weatherService, "00000");
+            });
+
+            Assert.AreEqual("No cities match your search query", weatherException.Message);
+            Assert.IsNull(weatherException.InnerException);
+        }
+
+        private WeatherService CreateLiveWeatherService()
+        {
+            return new WeatherService(Weather.Properties.Resources.WeatherUndergroundAPIKey.Trim());
         }
     }
 }

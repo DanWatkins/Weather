@@ -11,3 +11,4 @@ print('Remember to never commit this file to source control. It is ignored by th
 print('\n')
 
 print('Configure complete')
+junk = input('Press enter to continue...')

@@ -6,6 +6,11 @@ namespace Weather
 {
     public class WeatherException : Exception
     {
+        public WeatherException(string message) :
+            base(message)
+        {
+        }
+
         public WeatherException(string message, Exception innerException) :
             base(message, innerException)
         {
@@ -51,6 +56,13 @@ namespace Weather
             xmlDocument.LoadXml(xmlBuffer);
 
             var node_response = xmlDocument.FirstChild;
+            var node_error = node_response["error"];
+
+            if (node_error != null)
+            {
+                throw new WeatherException(node_error["description"].InnerText);
+            }
+
             var node_currentObservation = node_response["current_observation"];
             {
                 Temperature = double.Parse(node_currentObservation["temp_c"].InnerText);
