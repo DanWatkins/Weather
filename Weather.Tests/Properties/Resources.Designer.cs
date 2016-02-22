@@ -66,6 +66,26 @@ namespace Weather.Tests.Properties {
         ///	&lt;version&gt;0.1&lt;/version&gt;
         ///	&lt;termsofService&gt;http://www.wunderground.com/weather/api/d/terms.html&lt;/termsofService&gt;
         ///	&lt;features&gt;
+        ///	&lt;/features&gt;
+        ///		&lt;error&gt;
+        ///		&lt;type&gt;keynotfound&lt;/type&gt;
+        ///		&lt;description&gt;this key does not exist&lt;/description&gt;
+        ///	&lt;/error&gt;
+        ///&lt;/response&gt;
+        ///.
+        /// </summary>
+        internal static string CurrentConditions_ErrorInvalidAPIKey {
+            get {
+                return ResourceManager.GetString("CurrentConditions_ErrorInvalidAPIKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///&lt;response&gt;
+        ///	&lt;version&gt;0.1&lt;/version&gt;
+        ///	&lt;termsofService&gt;http://www.wunderground.com/weather/api/d/terms.html&lt;/termsofService&gt;
+        ///	&lt;features&gt;
         ///		&lt;feature&gt;conditions&lt;/feature&gt;
         ///	&lt;/features&gt;
         ///		&lt;error&gt;

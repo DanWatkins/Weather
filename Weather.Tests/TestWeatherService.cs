@@ -72,6 +72,16 @@ namespace Weather.Tests
         }
 
         [Test]
+        public void GetWeatherForZipCode_ErrorInvalidAPIKey()
+        {
+            var weatherService = new Mock<IWeatherService>();
+            weatherService.Setup(f => f.GetConditionsForZipCode("00000"))
+                .Returns(Properties.Resources.CurrentConditions_ErrorInvalidAPIKey);
+
+            TestGetWeatherForZipCodeErrorInvalidAPIKey(weatherService.Object);
+        }
+
+        [Test]
         [Category(TestCategory.Integration)]
         public void GetLiveWeatherForZipCode_58102()
         {
@@ -90,6 +100,13 @@ namespace Weather.Tests
         public void GetLiveWeatherForZipCode_ErrorNoCities()
         {
             TestGetWeatherForZipCodeErrorNoCities(CreateLiveWeatherService());
+        }
+
+        [Test]
+        [Category(TestCategory.Integration)]
+        public void GetLiveWeatherForZipCode_ErrorInvalidAPIKey()
+        {
+            TestGetWeatherForZipCodeErrorInvalidAPIKey(new WeatherService("NotARealKey_adkfha4adg924t8a4o78an64d7"));
         }
 
         #endregion
@@ -138,7 +155,18 @@ namespace Weather.Tests
                 WeatherInfo.ForZipCode(weatherService, "00000");
             });
 
-            Assert.AreEqual("No cities match your search query", weatherException.Message);
+            Assert.AreEqual("The specified zip code is not valid.", weatherException.Message);
+            Assert.IsNull(weatherException.InnerException);
+        }
+
+        private void TestGetWeatherForZipCodeErrorInvalidAPIKey(IWeatherService weatherService)
+        {
+            var weatherException = Assert.Throws<WeatherException>(delegate
+            {
+                WeatherInfo.ForZipCode(weatherService, "00000");
+            });
+
+            Assert.AreEqual("The API key for the weather service is not valid.", weatherException.Message);
             Assert.IsNull(weatherException.InnerException);
         }
 
