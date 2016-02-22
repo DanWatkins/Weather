@@ -44,7 +44,7 @@ namespace Weather.Tests
         [Test]
         public void GetWeatherForZipCode_XmlException()
         {
-            TestException<XmlException>("There was an xml error while parsing weather data fromt he weather service.");
+            TestException<XmlException>("There was an xml error while parsing weather data from the weather service.");
         }
 
         private void TestException<TException>(string message)
@@ -63,6 +63,21 @@ namespace Weather.Tests
             Assert.AreEqual(message, weatherException.Message);
             Assert.IsNotNull(weatherException.InnerException);
             Assert.IsTrue(weatherException.InnerException is TException);
+        }
+
+        [Test]
+        [Category(TestCategory.Integration)]
+        public void GetLiveWeatherForZipCode_58102()
+        {
+            string apiKey = Weather.Properties.Resources.WeatherUndergroundAPIKey.Trim();
+            var weatherInfo = WeatherInfo.ForZipCode(new WeatherService(apiKey), "58102");
+
+            Assert.AreEqual("Fargo", weatherInfo.Location.City);
+            Assert.AreEqual("ND", weatherInfo.Location.State);
+            Assert.AreEqual("US", weatherInfo.Location.Country);
+            Assert.AreEqual(271, weatherInfo.Location.Elevation);
+
+            Assert.IsTrue(-200 <= weatherInfo.Temperature && weatherInfo.Temperature <= 200);
         }
     }
 }

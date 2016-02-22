@@ -18,6 +18,8 @@ namespace Weather
 
         public double WindSpeed { get; set; }
 
+        public WeatherLocation Location { get; set; }
+
         readonly IWeatherService _weatherService;
 
         private WeatherInfo(IWeatherService weatherService)
@@ -40,7 +42,7 @@ namespace Weather
             }
             catch (XmlException xmlException)
             {
-                throw new WeatherException("There was an xml error while parsing weather data fromt he weather service.", xmlException);
+                throw new WeatherException("There was an xml error while parsing weather data from the weather service.", xmlException);
             }
         }
 
@@ -56,6 +58,15 @@ namespace Weather
             {
                 Temperature = double.Parse(node_currentObservation["temp_c"].InnerText);
                 WindSpeed = double.Parse(node_currentObservation["wind_kph"].InnerText);
+
+                var node_displayLocation = node_currentObservation["display_location"];
+                {
+                    Location = new WeatherLocation();
+                    Location.City = node_displayLocation["city"].InnerText;
+                    Location.State = node_displayLocation["state"].InnerText;
+                    Location.Country = node_displayLocation["country"].InnerText;
+                    Location.Elevation = (int)double.Parse(node_displayLocation["elevation"].InnerText); 
+                }
             }
         }
     }
