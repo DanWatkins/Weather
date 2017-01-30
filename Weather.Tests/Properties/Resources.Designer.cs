@@ -152,5 +152,14 @@ namespace Weather.Tests.Properties {
                 return ResourceManager.GetString("CurrentConditions_Zip_55038", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string WundergroundApiKey {
+            get {
+                return ResourceManager.GetString("WundergroundApiKey", resourceCulture);
+            }
+        }
     }
 }

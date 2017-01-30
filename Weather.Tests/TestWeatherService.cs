@@ -3,6 +3,7 @@ using NUnit.Framework;
 using System;
 using System.Net;
 using System.Xml;
+using Weather;
 
 namespace Weather.Tests
 {
@@ -172,7 +173,7 @@ namespace Weather.Tests
 
         private WeatherService CreateLiveWeatherService()
         {
-            return new WeatherService(Weather.Properties.Resources.WeatherUndergroundAPIKey.Trim());
+            return new WeatherService(Properties.Resources.WundergroundApiKey.Trim());
         }
     }
 }
