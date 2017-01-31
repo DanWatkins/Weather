@@ -1,6 +1,6 @@
 ﻿namespace Weather
 {
-    public class WeatherLocation
+    public class Location
     {
         public string City { get; set; }
 

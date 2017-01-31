@@ -1,12 +1,10 @@
-﻿using System;
-using System.Configuration;
-using System.Net;
+﻿using System.Net;
 
 namespace Weather
 {
     public interface IWeatherService
     {
-        string GetConditionsForZipCode(string zipCode);
+        string GetCurrentConditionsForZipCode(string zipCode);
     }
 
     public class WeatherService : IWeatherService
@@ -18,7 +16,7 @@ namespace Weather
             _apiKey = apiKey;
         }
 
-        public string GetConditionsForZipCode(string zipCode)
+        public string GetCurrentConditionsForZipCode(string zipCode)
         {
             string url = "http://api.wunderground.com/api/" + _apiKey + "/conditions/q/" + zipCode + ".xml";
 

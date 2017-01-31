@@ -5,36 +5,23 @@ using System.Xml;
 
 namespace Weather
 {
-    public class WeatherException : Exception
-    {
-        public WeatherException(string message) :
-            base(message)
-        {
-        }
-
-        public WeatherException(string message, Exception innerException) :
-            base(message, innerException)
-        {
-        }
-    }
-
-    public class WeatherInfo
+    public class CurrentConditions
     {
         public double Temperature { get; set; }
 
         public double WindSpeed { get; set; }
 
-        public WeatherLocation Location { get; set; }
+        public Location Location { get; set; }
 
-        public WeatherInfo()
+        public CurrentConditions()
         {
         }
 
-        public static WeatherInfo ForZipCode(IWeatherService weatherService, string zipCode)
+        public static CurrentConditions ForZipCode(IWeatherService weatherService, string zipCode)
         {
             try
             {
-                var weatherInfo = new WeatherInfo();
+                var weatherInfo = new CurrentConditions();
                 weatherInfo.UpdateForZipCode(weatherService, zipCode);
 
                 return weatherInfo;
@@ -51,7 +38,7 @@ namespace Weather
 
         private void UpdateForZipCode(IWeatherService weatherService, string zipCode)
         {
-            string xmlBuffer = weatherService.GetConditionsForZipCode(zipCode);
+            string xmlBuffer = weatherService.GetCurrentConditionsForZipCode(zipCode);
 
             var xmlDocument = new XmlDocument();
             xmlDocument.LoadXml(xmlBuffer);
@@ -81,7 +68,7 @@ namespace Weather
 
             var node_displayLocation = node_currentObservation["display_location"];
             {
-                Location = new WeatherLocation();
+                Location = new Location();
                 Location.City = node_displayLocation["city"].InnerText;
                 Location.State = node_displayLocation["state"].InnerText;
                 Location.Country = node_displayLocation["country"].InnerText;

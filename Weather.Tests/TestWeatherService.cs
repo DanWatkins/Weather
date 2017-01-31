@@ -3,7 +3,6 @@ using NUnit.Framework;
 using System;
 using System.Net;
 using System.Xml;
-using Weather;
 
 namespace Weather.Tests
 {
@@ -15,11 +14,11 @@ namespace Weather.Tests
         [Test]
         public void GetWeatherforZipCode_34101()
         {
-            var expectedWeatherInfo = new WeatherInfo
+            var expectedWeatherInfo = new CurrentConditions
             {
                 Temperature = 16.2,
                 WindSpeed = 0.0,
-                Location = new WeatherLocation
+                Location = new Location
                 {
                     City = "Naples",
                     State = "FL",
@@ -34,11 +33,11 @@ namespace Weather.Tests
         [Test]
         public void GetWeatherForZipCode_55038()
         {
-            var expectedWeatherInfo = new WeatherInfo
+            var expectedWeatherInfo = new CurrentConditions
             {
                 Temperature = 8.8,
                 WindSpeed = 14.5,
-                Location = new WeatherLocation
+                Location = new Location
                 {
                     City = "Hugo",
                     State = "MN",
@@ -66,7 +65,7 @@ namespace Weather.Tests
         public void GetWeatherForZipCode_ErrorNocities()
         {
             var weatherService = new Mock<IWeatherService>();
-            weatherService.Setup(f => f.GetConditionsForZipCode("00000"))
+            weatherService.Setup(f => f.GetCurrentConditionsForZipCode("00000"))
                 .Returns(Properties.Resources.CurrentConditions_ErrorNoCities);
 
             TestGetWeatherForZipCodeErrorNoCities(weatherService.Object);
@@ -76,7 +75,7 @@ namespace Weather.Tests
         public void GetWeatherForZipCode_ErrorInvalidAPIKey()
         {
             var weatherService = new Mock<IWeatherService>();
-            weatherService.Setup(f => f.GetConditionsForZipCode("00000"))
+            weatherService.Setup(f => f.GetCurrentConditionsForZipCode("00000"))
                 .Returns(Properties.Resources.CurrentConditions_ErrorInvalidAPIKey);
 
             TestGetWeatherForZipCodeErrorInvalidAPIKey(weatherService.Object);
@@ -86,7 +85,7 @@ namespace Weather.Tests
         [Category(TestCategory.Integration)]
         public void GetLiveWeatherForZipCode_58102()
         {
-            var weatherInfo = WeatherInfo.ForZipCode(CreateLiveWeatherService(), "58102");
+            var weatherInfo = CurrentConditions.ForZipCode(CreateLiveWeatherService(), "58102");
 
             Assert.AreEqual("Fargo", weatherInfo.Location.City);
             Assert.AreEqual("ND", weatherInfo.Location.State);
@@ -112,13 +111,13 @@ namespace Weather.Tests
 
         #endregion
 
-        private void TestGetWeatherForZipCode(string zipCode, string xmlWeatherData, WeatherInfo exp)
+        private void TestGetWeatherForZipCode(string zipCode, string xmlWeatherData, CurrentConditions exp)
         {
             var weatherService = new Mock<IWeatherService>();
-            weatherService.Setup(f => f.GetConditionsForZipCode(zipCode))
+            weatherService.Setup(f => f.GetCurrentConditionsForZipCode(zipCode))
                 .Returns(xmlWeatherData);
 
-            var weatherInfo = WeatherInfo.ForZipCode(weatherService.Object, zipCode);
+            var weatherInfo = CurrentConditions.ForZipCode(weatherService.Object, zipCode);
 
             Assert.AreEqual(exp.Temperature, weatherInfo.Temperature);
             Assert.AreEqual(exp.WindSpeed, weatherInfo.WindSpeed);
@@ -135,13 +134,13 @@ namespace Weather.Tests
             where TException : Exception, new()
         {
             var weatherService = new Mock<IWeatherService>();
-            weatherService.Setup(f => f.GetConditionsForZipCode("80001"))
+            weatherService.Setup(f => f.GetCurrentConditionsForZipCode("80001"))
                 .Throws(new TException());
-            WeatherInfo weatherInfo = null;
+            CurrentConditions weatherInfo = null;
 
             var weatherException = Assert.Throws<WeatherException>(delegate
             {
-                weatherInfo = WeatherInfo.ForZipCode(weatherService.Object, "80001");
+                weatherInfo = CurrentConditions.ForZipCode(weatherService.Object, "80001");
             });
 
             Assert.AreEqual(message, weatherException.Message);
@@ -153,7 +152,7 @@ namespace Weather.Tests
         {
             var weatherException = Assert.Throws<WeatherException>(delegate
             {
-                WeatherInfo.ForZipCode(weatherService, "00000");
+                CurrentConditions.ForZipCode(weatherService, "00000");
             });
 
             Assert.AreEqual("The specified zip code is not valid.", weatherException.Message);
@@ -164,7 +163,7 @@ namespace Weather.Tests
         {
             var weatherException = Assert.Throws<WeatherException>(delegate
             {
-                WeatherInfo.ForZipCode(weatherService, "00000");
+                CurrentConditions.ForZipCode(weatherService, "00000");
             });
 
             Assert.AreEqual("The API key for the weather service is not valid.", weatherException.Message);
