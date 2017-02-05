@@ -14,10 +14,12 @@ namespace Weather.Tests
         [Test]
         public void GetWeatherforZipCode_34101()
         {
-            var expectedWeatherInfo = new CurrentConditions
+            var expectedWeatherInfo = new Conditions
             {
-                Temperature = 16.2,
-                WindSpeed = 0.0,
+                Temperature = 16.2m,
+                WindSpeed = 0.0m,
+                WindDirection = "NE",
+                Description = "Partly Cloudy",
                 Location = new Location
                 {
                     City = "Naples",
@@ -33,10 +35,12 @@ namespace Weather.Tests
         [Test]
         public void GetWeatherForZipCode_55038()
         {
-            var expectedWeatherInfo = new CurrentConditions
+            var expectedWeatherInfo = new Conditions
             {
-                Temperature = 8.8,
-                WindSpeed = 14.5,
+                Temperature = 8.8m,
+                WindSpeed = 14.5m,
+                WindDirection = "WSW",
+                Description = "Clear",
                 Location = new Location
                 {
                     City = "Hugo",
@@ -85,14 +89,17 @@ namespace Weather.Tests
         [Category(TestCategory.Integration)]
         public void GetLiveWeatherForZipCode_58102()
         {
-            var weatherInfo = CurrentConditions.ForZipCode(CreateLiveWeatherService(), "58102");
+            var conditions = Conditions.ForZipCode(CreateLiveWeatherService(), "58102");
 
-            Assert.AreEqual("Fargo", weatherInfo.Location.City);
-            Assert.AreEqual("ND", weatherInfo.Location.State);
-            Assert.AreEqual("US", weatherInfo.Location.Country);
-            Assert.AreEqual(271, weatherInfo.Location.Elevation);
+            Assert.AreEqual("Fargo", conditions.Location.City);
+            Assert.AreEqual("ND", conditions.Location.State);
+            Assert.AreEqual("US", conditions.Location.Country);
+            Assert.AreEqual(271, conditions.Location.Elevation);
+            Assert.AreEqual("Mostly Cloudy", conditions.Description);
+            Assert.AreEqual(14.5, conditions.WindSpeed);
+            Assert.AreEqual("NNE", conditions.WindDirection);
 
-            Assert.IsTrue(-200 <= weatherInfo.Temperature && weatherInfo.Temperature <= 200);
+            Assert.IsTrue(-200 <= conditions.Temperature && conditions.Temperature <= 200);
         }
 
         [Test]
@@ -111,16 +118,18 @@ namespace Weather.Tests
 
         #endregion
 
-        private void TestGetWeatherForZipCode(string zipCode, string xmlWeatherData, CurrentConditions exp)
+        private void TestGetWeatherForZipCode(string zipCode, string xmlWeatherData, Conditions exp)
         {
             var weatherService = new Mock<IWeatherService>();
             weatherService.Setup(f => f.GetCurrentConditionsForZipCode(zipCode))
                 .Returns(xmlWeatherData);
 
-            var weatherInfo = CurrentConditions.ForZipCode(weatherService.Object, zipCode);
+            var weatherInfo = Conditions.ForZipCode(weatherService.Object, zipCode);
 
             Assert.AreEqual(exp.Temperature, weatherInfo.Temperature);
             Assert.AreEqual(exp.WindSpeed, weatherInfo.WindSpeed);
+            Assert.AreEqual(exp.WindDirection, weatherInfo.WindDirection);
+            Assert.AreEqual(exp.Description, weatherInfo.Description);
 
             {
                 Assert.AreEqual(exp.Location.City, weatherInfo.Location.City);
@@ -136,11 +145,11 @@ namespace Weather.Tests
             var weatherService = new Mock<IWeatherService>();
             weatherService.Setup(f => f.GetCurrentConditionsForZipCode("80001"))
                 .Throws(new TException());
-            CurrentConditions weatherInfo = null;
+            Conditions weatherInfo = null;
 
             var weatherException = Assert.Throws<WeatherException>(delegate
             {
-                weatherInfo = CurrentConditions.ForZipCode(weatherService.Object, "80001");
+                weatherInfo = Conditions.ForZipCode(weatherService.Object, "80001");
             });
 
             Assert.AreEqual(message, weatherException.Message);
@@ -152,7 +161,7 @@ namespace Weather.Tests
         {
             var weatherException = Assert.Throws<WeatherException>(delegate
             {
-                CurrentConditions.ForZipCode(weatherService, "00000");
+                Conditions.ForZipCode(weatherService, "00000");
             });
 
             Assert.AreEqual("The specified zip code is not valid.", weatherException.Message);
@@ -163,7 +172,7 @@ namespace Weather.Tests
         {
             var weatherException = Assert.Throws<WeatherException>(delegate
             {
-                CurrentConditions.ForZipCode(weatherService, "00000");
+                Conditions.ForZipCode(weatherService, "00000");
             });
 
             Assert.AreEqual("The API key for the weather service is not valid.", weatherException.Message);

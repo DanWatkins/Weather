@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
+using Weather.Client.Desktop.Windows.ViewModel;
 
 namespace Weather.Client.Desktop.Windows.View
 {
@@ -23,6 +11,7 @@ namespace Weather.Client.Desktop.Windows.View
         public MainWindow()
         {
             InitializeComponent();
+            _currentConditionsView.DataContext = new ConditionsViewModel();
         }
     }
 }

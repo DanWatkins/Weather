@@ -5,23 +5,25 @@ using System.Xml;
 
 namespace Weather
 {
-    public class CurrentConditions
+    public class Conditions
     {
-        public double Temperature { get; set; }
+        public decimal Temperature { get; set; }
 
-        public double WindSpeed { get; set; }
+        public decimal WindSpeed { get; set; }
+
+        public string WindDirection { get; set; }
 
         public Location Location { get; set; }
 
-        public CurrentConditions()
-        {
-        }
+        public string Description { get; set; }
+        public string Humidity { get; set; }
+        public decimal Visibility { get; set; }
 
-        public static CurrentConditions ForZipCode(IWeatherService weatherService, string zipCode)
+        public static Conditions ForZipCode(IWeatherService weatherService, string zipCode)
         {
             try
             {
-                var weatherInfo = new CurrentConditions();
+                var weatherInfo = new Conditions();
                 weatherInfo.UpdateForZipCode(weatherService, zipCode);
 
                 return weatherInfo;
@@ -63,8 +65,10 @@ namespace Weather
 
         private void FillFromCurrentObservationXMLElement(XmlElement node_currentObservation)
         {
-            Temperature = double.Parse(node_currentObservation["temp_c"].InnerText);
-            WindSpeed = double.Parse(node_currentObservation["wind_kph"].InnerText);
+            Temperature = decimal.Parse(node_currentObservation["temp_c"].InnerText);
+            WindSpeed = decimal.Parse(node_currentObservation["wind_kph"].InnerText);
+            WindDirection = node_currentObservation["wind_dir"].InnerText;
+            Description = node_currentObservation["weather"].InnerText;
 
             var node_displayLocation = node_currentObservation["display_location"];
             {
