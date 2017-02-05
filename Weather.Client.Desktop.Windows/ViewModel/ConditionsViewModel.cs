@@ -6,12 +6,14 @@
 
         public string LocationName => $"{_conditions.Location.City}, {_conditions.Location.State}";
 
+        public string TemperatureSummary => $"{_conditions.Temperature} F";
+
         public string GeneralSummary => _conditions.Description;
 
         public string WindSummary => $"Wind {_conditions.WindDirection} {_conditions.WindSpeed} mph";
 
         public string HumiditySummary => $"Humidity {_conditions.Humidity}";
-
+        
         public string VisibilitySummary => $"Visibility {_conditions.Visibility} miles";
 
         public ConditionsViewModel()

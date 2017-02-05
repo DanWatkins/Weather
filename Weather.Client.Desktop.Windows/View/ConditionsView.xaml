@@ -9,7 +9,8 @@
              Background="BlanchedAlmond">
     <StackPanel Orientation="Vertical" Background="White">
         <Label Content="{Binding LocationName, FallbackValue='Hugo, MN'}" />
-        <Label Content="{Binding GeneralSummary, FallbackValue='Partly Cloudy'}" FontSize="34" />
+        <Label Content="{Binding TemperatureSummary, FallbackValue='12 F'}" FontSize="34" />
+        <Label Content="{Binding GeneralSummary, FallbackValue='Partly Cloudy'}" FontSize="18" />
         <Label Content="{Binding WindSummary, FallbackValue='Wind WSW 6 mph'}" />
         <Label Content="{Binding HumiditySummary, FallbackValue='Humidity 64%'}" />
         <Label Content="{Binding VisibilitySummary, FallbackValue='Visibility 7 miles'}" />
